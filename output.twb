@@ -282,7 +282,7 @@
               <zone _.fcp.SetMembershipControl.false...type="layout-flow" _.fcp.SetMembershipControl.true...type-v2="layout-flow" h="72945" id="108" param="horz" w="48769" x="50000" y="25685">
                 <zone _.fcp.SetMembershipControl.false...type="layout-flow" _.fcp.SetMembershipControl.true...type-v2="layout-flow" h="72945" id="109" param="horz" w="48769" x="50000" y="25685">
                   <zone _.fcp.SetMembershipControl.false...type="layout-basic" _.fcp.SetMembershipControl.true...type-v2="layout-basic" h="72945" id="110" w="48769" x="50000" y="25685">
-                    <zone h="72945" id="104" name="Bar" w="48769" x="50000" y="25685" jisc-modified="1">
+                    <zone h="72945" id="104" name="Bar" w="48769" x="50000" y="25685" is-modified="1">
                       <zone-style>
                         <format attr="border-color" value="#000000"/>
                         <format attr="border-style" value="none"/>
@@ -295,7 +295,7 @@
               </zone>
             </zone>
           </zone>
-          <zone _.fcp.SetMembershipControl.false...type="filter" _.fcp.SetMembershipControl.true...type-v2="filter" h="24315" id="100" name="Bar" param="[federated.1p1dkhb0300j8l10aofes0d1111t].[none:Region:nk]" values="database" w="48769" x="1231" y="1370" jisc-modified="1">
+          <zone _.fcp.SetMembershipControl.false...type="filter" _.fcp.SetMembershipControl.true...type-v2="filter" h="24315" id="100" name="Bar" param="[federated.1p1dkhb0300j8l10aofes0d1111t].[none:Region:nk]" values="database" w="48769" x="1231" y="1370" is-modified="1">
             <zone-style>
               <format attr="border-color" value="#000000"/>
               <format attr="border-style" value="none"/>
@@ -303,7 +303,7 @@
               <format attr="margin" value="4"/>
             </zone-style>
           </zone>
-          <zone _.fcp.SetMembershipControl.false...type="paramctrl" _.fcp.SetMembershipControl.true...type-v2="paramctrl" h="24315" id="101" jisc-modified="1" mode="compact" param="[Parameters].[Parameter 2]" w="24385" x="50000" y="1370">
+          <zone _.fcp.SetMembershipControl.false...type="paramctrl" _.fcp.SetMembershipControl.true...type-v2="paramctrl" h="24315" id="101" jisc-modified="1" mode="compact" param="[Parameters].[Parameter 2]" w="24385" x="50000" y="1370" is-modified="1">
             <zone-style>
               <format attr="border-color" value="#000000"/>
               <format attr="border-style" value="none"/>
@@ -311,7 +311,7 @@
               <format attr="margin" value="4"/>
             </zone-style>
           </zone>
-          <zone _.fcp.SetMembershipControl.false...type="paramctrl" _.fcp.SetMembershipControl.true...type-v2="paramctrl" h="24315" id="102" jisc-modified="1" mode="compact" param="[Parameters].[Parameter 1]" w="24384" x="74385" y="1370">
+          <zone _.fcp.SetMembershipControl.false...type="paramctrl" _.fcp.SetMembershipControl.true...type-v2="paramctrl" h="24315" id="102" jisc-modified="1" mode="compact" param="[Parameters].[Parameter 1]" w="24384" x="74385" y="1370" is-modified="1">
             <zone-style>
               <format attr="border-color" value="#000000"/>
               <format attr="border-style" value="none"/>
@@ -319,7 +319,7 @@
               <format attr="margin" value="4"/>
             </zone-style>
           </zone>
-          <zone h="72945" id="103" name="Pie" w="48769" x="1231" y="25685" jisc-modified="1">
+          <zone h="72945" id="103" name="Pie" w="48769" x="1231" y="25685" is-modified="1">
             <zone-style>
               <format attr="border-color" value="#000000"/>
               <format attr="border-style" value="none"/>
@@ -370,7 +370,7 @@
               <zone _.fcp.SetMembershipControl.false...type="layout-flow" _.fcp.SetMembershipControl.true...type-v2="layout-flow" h="43950" id="219" param="horz" w="97538" x="1231" y="6050">
                 <zone _.fcp.SetMembershipControl.false...type="layout-flow" _.fcp.SetMembershipControl.true...type-v2="layout-flow" h="43950" id="220" param="horz" w="97538" x="1231" y="6050">
                   <zone _.fcp.SetMembershipControl.false...type="layout-basic" _.fcp.SetMembershipControl.true...type-v2="layout-basic" h="43950" id="221" w="97538" x="1231" y="6050">
-                    <zone h="43950" id="214" name="Bar" w="48770" x="49999" y="6050" jisc-modified="1">
+                    <zone h="43950" id="214" name="Bar" w="48770" x="49999" y="6050" is-modified="1">
                       <zone-style>
                         <format attr="border-color" value="#000000"/>
                         <format attr="border-style" value="none"/>
@@ -378,7 +378,7 @@
                         <format attr="margin" value="4"/>
                       </zone-style>
                     </zone>
-                    <zone h="43950" id="213" name="Pie" w="48768" x="1231" y="6050" jisc-modified="1">
+                    <zone h="43950" id="213" name="Pie" w="48768" x="1231" y="6050" is-modified="1">
                       <zone-style>
                         <format attr="border-color" value="#000000"/>
                         <format attr="border-style" value="none"/>
@@ -389,7 +389,7 @@
                   </zone>
                 </zone>
               </zone>
-              <zone _.fcp.SetMembershipControl.false...type="paramctrl" _.fcp.SetMembershipControl.true...type-v2="paramctrl" h="4680" id="211" jisc-modified="1" mode="compact" param="[Parameters].[Parameter 1]" w="48768" x="1231" y="1370">
+              <zone _.fcp.SetMembershipControl.false...type="paramctrl" _.fcp.SetMembershipControl.true...type-v2="paramctrl" h="4680" id="211" jisc-modified="1" mode="compact" param="[Parameters].[Parameter 1]" w="48768" x="1231" y="1370" is-modified="1">
                 <zone-style>
                   <format attr="border-color" value="#000000"/>
                   <format attr="border-style" value="none"/>
@@ -397,7 +397,7 @@
                   <format attr="margin" value="4"/>
                 </zone-style>
               </zone>
-              <zone _.fcp.SetMembershipControl.false...type="paramctrl" _.fcp.SetMembershipControl.true...type-v2="paramctrl" h="4680" id="212" jisc-modified="1" mode="compact" param="[Parameters].[Parameter 2]" w="48770" x="49999" y="1370">
+              <zone _.fcp.SetMembershipControl.false...type="paramctrl" _.fcp.SetMembershipControl.true...type-v2="paramctrl" h="4680" id="212" jisc-modified="1" mode="compact" param="[Parameters].[Parameter 2]" w="48770" x="49999" y="1370" is-modified="1">
                 <zone-style>
                   <format attr="border-color" value="#000000"/>
                   <format attr="border-style" value="none"/>
@@ -407,7 +407,7 @@
               </zone>
             </zone>
           </zone>
-          <zone _.fcp.SetMembershipControl.false...type="filter" _.fcp.SetMembershipControl.true...type-v2="filter" h="48630" id="215" name="Bar" param="[federated.1p1dkhb0300j8l10aofes0d1111t].[none:Region:nk]" show-exclude="false" show-filter-state="false" show-mode="false" show-search="false" values="database" w="97538" x="1231" y="50000" jisc-modified="1">
+          <zone _.fcp.SetMembershipControl.false...type="filter" _.fcp.SetMembershipControl.true...type-v2="filter" h="48630" id="215" name="Bar" param="[federated.1p1dkhb0300j8l10aofes0d1111t].[none:Region:nk]" show-exclude="false" show-filter-state="false" show-mode="false" show-search="false" values="database" w="97538" x="1231" y="50000" is-modified="1">
             <zone-style>
               <format attr="border-color" value="#000000"/>
               <format attr="border-style" value="none"/>
