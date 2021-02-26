@@ -1,4 +1,5 @@
 from lxml.etree import XMLParser, parse
+import argparse
 import os
 import sys
 from yaml import load, loader
@@ -64,12 +65,13 @@ def check_alt_text(tree):
 def check_titles_and_captions(tree):
     zones = tree.xpath("//zone[@name]")
     for zone in zones:
-        dashboard_name = get_parent_dashboard(zone)
-        item = zone.get('name')
-        if zone.get('show-title') and zone.get('show-title') == 'false':
-            print("A5 Object '" + item + "' in dashboard '" + dashboard_name + "' has no title")
-        if not zone.get('show-caption') or zone.get('show-caption') == 'false':
-            print("A6 Object '" + item + "' in dashboard '" + dashboard_name + "' has no caption")
+        if zone.get('_.fcp.SetMembershipControl.false...type') is None:
+            dashboard_name = get_parent_dashboard(zone)
+            item = zone.get('name')
+            if zone.get('show-title') and zone.get('show-title') == 'false':
+                print("A5 Object '" + item + "' in dashboard '" + dashboard_name + "' has no title")
+            if not zone.get('show-caption') or zone.get('show-caption') == 'false':
+                print("A6 Object '" + item + "' in dashboard '" + dashboard_name + "' has no caption")
 
 
 def fix_tabs(input_filename, output_filename, configuration):
@@ -115,33 +117,48 @@ def fix_tabs(input_filename, output_filename, configuration):
 
 if __name__ == "__main__":
 
+    argparser = argparse.ArgumentParser(description='Accessibility testing and tab focus order fixer for Tableau.')
+    argparser.add_argument('input_path', metavar='I', type=str, nargs=1, default='testing.twb',
+                        help='The name of the Tableau file to process')
+    argparser.add_argument('output_path', metavar='O', type=str, nargs=1, default='output.twb',
+                        help='The output file name')
+    argparser.add_argument('manifest_path', metavar='M', type=str, nargs=1, default='manifest.txt',
+                        help='The manifest file')
+    argparser.add_argument('-t', action='store_true',
+                        help='Just check for issues without modifying focus order')
+
+    args = argparser.parse_args()
+
     # Defaults
-    input_path = 'testing.twb'
-    output_path = 'output.twb'
-    manifest_path = 'manifest.txt'
+    input_path = vars(args)['input_path'][0]
+    output_path = vars(args)['output_path'][0]
+    manifest_path = vars(args)['manifest_path'][0]
+    check_only = vars(args)['t']
 
-    if sys.argv.__len__() > 1:
-        input_path = sys.argv[1]
-        if not os.path.exists(input_path):
-            print('Input workbook does not exist')
-            exit()
-        else:
-            print("Input workbook: "+input_path)
-    if sys.argv.__len__() > 2:
-        output_path = sys.argv[2]
-        print("Output workbook: "+output_path)
+    if check_only:
+        print("Only checking for issues, will not create output")
+    else:
+        print("Modifying tab order and checking issues")
 
-    if sys.argv.__len__() > 3:
-        manifest_path = sys.argv[3]
-        if not os.path.exists(input_path):
-            print('Manifest does not exist')
-            exit()
-        else:
-            print("Manifest: "+manifest_path)
+    if not os.path.exists(input_path):
+        print('Input workbook does not exist')
+        exit()
+    else:
+        print("Input workbook: "+input_path)
+
+    print("Output workbook: "+output_path)
+
+    if not os.path.exists(manifest_path) and not check_only:
+        print('Manifest does not exist')
+        exit()
+    else:
+        print("Manifest: "+manifest_path)
 
     # Load the configuration/manifest
-    with open(manifest_path, 'r') as file:
-        configuration = load(file, Loader=loader.SafeLoader)
+    if not check_only:
+        with open(manifest_path, 'r') as file:
+            configuration = load(file, Loader=loader.SafeLoader)
+            fix_tabs(input_path, output_path, configuration)
 
     check_accessibility(input_path)
-    fix_tabs(input_path, output_path, configuration)
+
