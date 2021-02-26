@@ -3,10 +3,10 @@ Dashboard:
 - Parameter 2
 - Parameter 1
 - Pie
-- Bar
+- Bar With Mark Labels
 Other Dashboard:
 - Parameter 1
 - Parameter 2
 - Pie
-- Bar
+- Bar Without Mark Labels
 - Region

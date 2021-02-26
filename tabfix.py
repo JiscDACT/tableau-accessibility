@@ -8,18 +8,20 @@ from yaml import load, loader
 p = XMLParser(huge_tree=True)
 
 
-def get_parent_dashboard(item):
+def get_parent_tag(item, tag):
     while item is not None:
-        if item.tag == 'dashboard':
-            return item.get("name")
-        item = item.getparent()
-
-
-def get_parent_zone(item):
-    while item is not None:
-        if item.tag == 'zone':
+        if item.tag == tag:
             return item
         item = item.getparent()
+
+def get_parent_worksheet(item):
+    return get_parent_tag(item, 'worksheet')
+
+def get_parent_dashboard(item):
+    return get_parent_tag(item, 'dashboard').get("name")
+
+def get_parent_zone(item):
+    return get_parent_tag(item, 'zone')
 
 
 def get_button(tree, dashboard_name, caption):
@@ -53,6 +55,30 @@ def check_accessibility(input_filename):
         tree = parse(f, parser=p)
         check_alt_text(tree)
         check_titles_and_captions(tree)
+        check_vertical_text(tree)
+        check_mark_labels(tree)
+
+
+def check_mark_labels(tree):
+    formats = tree.xpath("//worksheet[not(.//format[@attr='mark-labels-show'])]")
+    for format in formats:
+        sheet = get_parent_tag(format, 'worksheet').get("name")
+        zones = tree.xpath("//zone[@name='"+sheet+"']")
+        for zone in zones:
+            if zone.get('_.fcp.SetMembershipControl.false...type') is None:
+                dashboard_name = get_parent_dashboard(zone)
+                print("B3 no mark labels for view '"+sheet+"' in dashboard '"+dashboard_name+"'")
+
+
+def check_vertical_text(tree):
+    formats = tree.xpath("//format[@attr='text-orientation' and (@value='-90' or @value='90')]")
+    for format in formats:
+        sheet = get_parent_tag(format, 'worksheet').get("name")
+        zones = tree.xpath("//zone[@name='"+sheet+"']")
+        for zone in zones:
+            if zone.get('_.fcp.SetMembershipControl.false...type') is None:
+                dashboard_name = get_parent_dashboard(zone)
+                print("B1 text is rotated for view '"+sheet+"' in dashboard '"+dashboard_name+"'")
 
 
 def check_alt_text(tree):
@@ -94,9 +120,12 @@ def fix_tabs(input_filename, output_filename, configuration):
                     zone = get_parameter(tree, dashboard_name, item)
                 if zone is None or zone.__len__() == 0:
                     zone = get_filter(tree, dashboard_name, item)
-                zone.set("id", zone_id.__str__())
-                zone.set("is-modified", '1')
-                zone_id += 1
+                if zone is not None:
+                    zone.set("id", zone_id.__str__())
+                    zone.set("is-modified", '1')
+                    zone_id += 1
+                else:
+                    print("Error in manifest: object '"+item+"' does not exist in dashboard '"+dashboard_name+"'")
 
             # Add IDs to everything else in document order
             zones = tree.xpath('//dashboard[@name="' + dashboard_name + '"]//zone')
