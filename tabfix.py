@@ -125,7 +125,7 @@ def fix_tabs(input_filename, output_filename, configuration):
                     zone.set("is-modified", '1')
                     zone_id += 1
                 else:
-                    print("Error in manifest: object '"+item+"' does not exist in dashboard '"+dashboard_name+"'")
+                    print("ERROR in manifest: object '"+item+"' does not exist in dashboard '"+dashboard_name+"'")
 
             # Add IDs to everything else in document order
             zones = tree.xpath('//dashboard[@name="' + dashboard_name + '"]//zone')
