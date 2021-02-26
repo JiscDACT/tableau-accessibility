@@ -7,6 +7,13 @@ from yaml import load, loader
 p = XMLParser(huge_tree=True)
 
 
+def get_parent_dashboard(item):
+    while item is not None:
+        if item.tag == 'dashboard':
+            return item.get("name")
+        item = item.getparent()
+
+
 def get_parent_zone(item):
     while item is not None:
         if item.tag == 'zone':
@@ -38,6 +45,31 @@ def get_filter(tree, dashboard_name, filter):
         zone = parameter[0]
         return zone
     return None
+
+
+def check_accessibility(input_filename):
+    with open(input_filename, 'r', encoding='utf-8') as f:  # open in readonly mode
+        tree = parse(f, parser=p)
+        check_alt_text(tree)
+        check_titles_and_captions(tree)
+
+
+def check_alt_text(tree):
+    images = tree.xpath("//zone[@_.fcp.SetMembershipControl.false...type='bitmap']")
+    for image in images:
+        if not image.get("alt-text") or image.get("alt-text") == '':
+            print("A4 image with missing alternative text in dashboard '"+get_parent_dashboard(image) + "'")
+
+
+def check_titles_and_captions(tree):
+    zones = tree.xpath("//zone[@name]")
+    for zone in zones:
+        dashboard_name = get_parent_dashboard(zone)
+        item = zone.get('name')
+        if zone.get('show-title') and zone.get('show-title') == 'false':
+            print("A5 Object '" + item + "' in dashboard '" + dashboard_name + "' has no title")
+        if not zone.get('show-caption') or zone.get('show-caption') == 'false':
+            print("A6 Object '" + item + "' in dashboard '" + dashboard_name + "' has no caption")
 
 
 def fix_tabs(input_filename, output_filename, configuration):
@@ -111,4 +143,5 @@ if __name__ == "__main__":
     with open(manifest_path, 'r') as file:
         configuration = load(file, Loader=loader.SafeLoader)
 
+    check_accessibility(input_path)
     fix_tabs(input_path, output_path, configuration)
