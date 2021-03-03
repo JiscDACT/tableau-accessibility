@@ -147,11 +147,11 @@ def fix_tabs(input_filename, output_filename, configuration):
 if __name__ == "__main__":
 
     argparser = argparse.ArgumentParser(description='Accessibility testing and tab focus order fixer for Tableau.')
-    argparser.add_argument('input_path', metavar='I', type=str, nargs=1, default='testing.twb',
+    argparser.add_argument('input_path', metavar='<input>', type=str, nargs=1, default='testing.twb',
                         help='The name of the Tableau file to process')
-    argparser.add_argument('output_path', metavar='O', type=str, nargs=1, default='output.twb',
+    argparser.add_argument('output_path', metavar='<output>', type=str, nargs='?', default='output.twb',
                         help='The output file name')
-    argparser.add_argument('manifest_path', metavar='M', type=str, nargs=1, default='manifest.txt',
+    argparser.add_argument('manifest_path', metavar='<manifest>', type=str, nargs='?', default='manifest.txt',
                         help='The manifest file')
     argparser.add_argument('-t', action='store_true',
                         help='Just check for issues without modifying focus order')
@@ -160,14 +160,9 @@ if __name__ == "__main__":
 
     # Defaults
     input_path = vars(args)['input_path'][0]
-    output_path = vars(args)['output_path'][0]
-    manifest_path = vars(args)['manifest_path'][0]
+    output_path = vars(args)['output_path']
+    manifest_path = vars(args)['manifest_path']
     check_only = vars(args)['t']
-
-    if check_only:
-        print("Only checking for issues, will not create output")
-    else:
-        print("Modifying tab order and checking issues")
 
     if not os.path.exists(input_path):
         print('Input workbook does not exist')
@@ -175,16 +170,19 @@ if __name__ == "__main__":
     else:
         print("Input workbook: "+input_path)
 
-    print("Output workbook: "+output_path)
-
-    if not os.path.exists(manifest_path) and not check_only:
-        print('Manifest does not exist')
-        exit()
+    if check_only:
+        print("Only checking for issues, will not create output")
     else:
-        print("Manifest: "+manifest_path)
+        print("Modifying tab order and checking issues")
+        print("Output workbook: " + output_path)
 
-    # Load the configuration/manifest
-    if not check_only:
+        if not os.path.exists(manifest_path) and not check_only:
+            print('Manifest does not exist')
+            exit()
+        else:
+            print("Manifest: " + manifest_path)
+
+            # Load the configuration/manifest
         with open(manifest_path, 'r') as file:
             configuration = load(file, Loader=loader.SafeLoader)
             fix_tabs(input_path, output_path, configuration)
