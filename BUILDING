@@ -1,1 +1,2 @@
+venv\Scripts\activate
 pyinstaller -F tabfix.py
