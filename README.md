@@ -45,3 +45,7 @@ It may be possible in future to extend Tabfix to check A2 and B5.
 ## Specifying the focus order using a manifest file
 
 ## Known issues and limitations
+Tabfix currently has problems with fixing the focus order where there are 
+device layouts, and outputs the modified .twb without device layouts.
+
+Tabfix can't open packaged workbooks (.twbx), only .twb files.
