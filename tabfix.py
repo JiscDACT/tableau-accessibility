@@ -8,30 +8,55 @@ from yaml import load, loader
 p = XMLParser(huge_tree=True)
 
 
+def get_item(tree, dashboard_name, item):
+    zone = get_view(tree, dashboard_name, item)
+    if zone is not None and zone.__len__() > 0:
+        zone = zone[0]
+    if zone is None or zone.__len__() == 0:
+        zone = get_button(tree, dashboard_name, item)
+    if zone is None or zone.__len__() == 0:
+        zone = get_parameter(tree, dashboard_name, item)
+    if zone is None or zone.__len__() == 0:
+        zone = get_filter(tree, dashboard_name, item)
+    return zone
+
+
 def get_parent_tag(item, tag):
     while item is not None:
         if item.tag == tag:
             return item
         item = item.getparent()
 
+
 def get_parent_worksheet(item):
     return get_parent_tag(item, 'worksheet')
 
+
 def get_parent_dashboard(item):
     return get_parent_tag(item, 'dashboard').get("name")
+
 
 def get_parent_zone(item):
     return get_parent_tag(item, 'zone')
 
 
+def get_view(tree, dashboard_name, view):
+    view = tree.xpath("//dashboard[@name='" + dashboard_name + "']//zone[@name='" + view + "']")
+    if view is not None and view.__len__() > 0:
+        zone = view[0]
+        return zone
+    return None
+
+
 def get_button(tree, dashboard_name, caption):
-    button = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//caption[text()='" + caption + "']")
+    button = tree.xpath("//dashboard[@name='" + dashboard_name + "']//zone//button//caption[text()='" + caption + "']")
     if button is not None and button.__len__() > 0:
         zone = get_parent_zone(button[0])
         return zone
     return None
 
 
+# TODO ensure this works with 2019.4
 def get_parameter(tree, dashboard_name, parameter):
     param = '[Parameters].['+parameter+']'
     parameter = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@param='" + param + "']")
@@ -53,51 +78,93 @@ def get_filter(tree, dashboard_name, filter):
 def check_accessibility(input_filename):
     with open(input_filename, 'r', encoding='utf-8') as f:  # open in readonly mode
         tree = parse(f, parser=p)
-        check_alt_text(tree)
-        check_titles_and_captions(tree)
-        check_vertical_text(tree)
-        check_mark_labels(tree)
+        warnings = []
+        warnings = warnings + check_alt_text(tree)
+        warnings = warnings + check_titles_and_captions(tree)
+        warnings = warnings + check_vertical_text(tree)
+        warnings = warnings + check_mark_labels(tree)
+        return warnings
 
 
 def check_mark_labels(tree):
     formats = tree.xpath("//worksheet[not(.//format[@attr='mark-labels-show'])]")
+    warnings = []
     for format in formats:
         sheet = get_parent_tag(format, 'worksheet').get("name")
         zones = tree.xpath("//zone[@name='"+sheet+"']")
         for zone in zones:
-            if zone.get('_.fcp.SetMembershipControl.false...type') is None:
+            if zone.get('_.fcp.SetMembershipControl.false...type') is None and zone.get("type") is None:
                 dashboard_name = get_parent_dashboard(zone)
-                print("B3 no mark labels for view '"+sheet+"' in dashboard '"+dashboard_name+"'")
+                warnings.append(
+                    {
+                        "code": "B3",
+                        "dashboard": dashboard_name,
+                        "item": sheet,
+                        "message": "B3 no mark labels for view '"+sheet+"' in dashboard '"+dashboard_name+"'"
+                    })
+    return warnings
 
 
 def check_vertical_text(tree):
     formats = tree.xpath("//format[@attr='text-orientation' and (@value='-90' or @value='90')]")
+    warnings = []
     for format in formats:
         sheet = get_parent_tag(format, 'worksheet').get("name")
         zones = tree.xpath("//zone[@name='"+sheet+"']")
         for zone in zones:
-            if zone.get('_.fcp.SetMembershipControl.false...type') is None:
+            if zone.get('_.fcp.SetMembershipControl.false...type') is None and zone.get("type") is None:
                 dashboard_name = get_parent_dashboard(zone)
-                print("B1 text is rotated for view '"+sheet+"' in dashboard '"+dashboard_name+"'")
+                warnings.append(
+                    {
+                        "code": "B1",
+                        "dashboard": dashboard_name,
+                        "item": sheet,
+                        "message": "B3 text is rotated for view '"+sheet+"' in dashboard '"+dashboard_name+"'"
+                    })
+    return warnings
 
 
+# TODO ensure this works with 2019.4
 def check_alt_text(tree):
-    images = tree.xpath("//zone[@_.fcp.SetMembershipControl.false...type='bitmap']")
+    warnings = []
+    images = tree.xpath("//zone[@_.fcp.SetMembershipControl.false...type='bitmap' or @type='bitmap']")
     for image in images:
         if not image.get("alt-text") or image.get("alt-text") == '':
-            print("A4 image with missing alternative text in dashboard '"+get_parent_dashboard(image) + "'")
+            dashboard_name = get_parent_dashboard(image)
+            warnings.append(
+                {
+                    "code": "A4",
+                    "dashboard": dashboard_name,
+                    "item": image,
+                    "message": "A4 image with missing alternative text in dashboard '" + dashboard_name + "'"
+                })
+    return warnings
 
 
 def check_titles_and_captions(tree):
+    warnings = []
     zones = tree.xpath("//zone[@name]")
     for zone in zones:
-        if zone.get('_.fcp.SetMembershipControl.false...type') is None:
+        if zone.get('_.fcp.SetMembershipControl.false...type') is None and zone.get("type") is None:
             dashboard_name = get_parent_dashboard(zone)
             item = zone.get('name')
             if zone.get('show-title') and zone.get('show-title') == 'false':
-                print("A5 Object '" + item + "' in dashboard '" + dashboard_name + "' has no title")
+                warnings.append(
+                    {
+                        "code": "A5",
+                        "dashboard": dashboard_name,
+                        "item": item,
+                        "message": "A5 Object '" + item + "' in dashboard '" + dashboard_name + "' has no title"
+                    })
             if not zone.get('show-caption') or zone.get('show-caption') == 'false':
-                print("A6 Object '" + item + "' in dashboard '" + dashboard_name + "' has no caption")
+                warnings.append(
+                    {
+                        "code": "A6",
+                        "dashboard": dashboard_name,
+                        "item": item,
+                        "message": "A6 Object '" + item + "' in dashboard '" + dashboard_name + "' has no caption"
+                    })
+    return warnings
 
 
 def fix_tabs(input_filename, output_filename, configuration):
@@ -111,15 +178,7 @@ def fix_tabs(input_filename, output_filename, configuration):
 
             # Start providing IDs for the named items
             for item in tab_order:
-                zone = tree.xpath("//dashboard[@name='"+dashboard_name+"']//zone[@name='"+item+"']")
-                if zone is not None and zone.__len__() > 0:
-                    zone = zone[0]
-                if zone is None or zone.__len__() == 0:
-                    zone = get_button(tree, dashboard_name, item)
-                if zone is None or zone.__len__() == 0:
-                    zone = get_parameter(tree, dashboard_name, item)
-                if zone is None or zone.__len__() == 0:
-                    zone = get_filter(tree, dashboard_name, item)
+                zone = get_item(tree, dashboard_name, item)
                 if zone is not None:
                     zone.set("id", zone_id.__str__())
                     zone.set("is-modified", '1')
@@ -136,6 +195,7 @@ def fix_tabs(input_filename, output_filename, configuration):
 
             dashboard = tree.find("//dashboard[@name='"+dashboard_name+"']")
 
+            # TODO handle device layouts properly
             # Duplicate IDs in device layouts cause problems so get rid of them...
             layouts = dashboard.find("devicelayouts")
             if layouts is not None:
@@ -187,5 +247,9 @@ if __name__ == "__main__":
             configuration = load(file, Loader=loader.SafeLoader)
             fix_tabs(input_path, output_path, configuration)
 
-    check_accessibility(input_path)
+    warnings = check_accessibility(input_path)
+    for warning in warnings:
+        print(warning.get("message"))
 
+    print("Note that this tool cannot check for a number of common accessibility issues (codes A1, A2, A3, A7, B2, "
+          "B4, B5, B6) and you should check these using other methods.")

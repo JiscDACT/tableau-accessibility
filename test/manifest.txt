@@ -1,10 +1,12 @@
 Dashboard:
+- navigate to other dashboard
 - Region
 - Parameter 2
 - Parameter 1
 - Pie
 - Bar With Mark Labels
 - Bar Without Mark Labels
+- '% blah'
 Other Dashboard:
 - Parameter 1
 - Parameter 2
