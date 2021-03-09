@@ -72,3 +72,24 @@ def test_check_titles_and_captions(xml_fixture):
         assert (warning.get("code") == 'A5' and warning.get("item") in ["Pie", "Sheet 3"]) or warning.get("code") == 'A6'
         assert (warning.get("code") == 'A6' and warning.get("item") in ["Bar Without Mark Labels", "Sheet 3"]) or warning.get("code") == 'A5'
 
+
+def test_load_manifest():
+    assert tabfix.load_manifest('manifest.txt') is not None
+
+
+def test_fix_tabs(xml_fixture):
+    configuration = {"Dashboard": ["Region", "Pie"]}
+    tree = tabfix.fix_tabs_in_tree(xml_fixture, configuration)
+    region = tabfix.get_item(tree, "Dashboard", "Region")
+    pie = tabfix.get_item(tree, "Dashboard", "Pie")
+    assert "100" == region.get("id")
+    assert "101" == pie.get("id")
+
+    configuration = {"Dashboard": ["Pie", "Region"]}
+    tree = tabfix.fix_tabs_in_tree(xml_fixture, configuration)
+    region = tabfix.get_item(tree, "Dashboard", "Region")
+    pie = tabfix.get_item(tree, "Dashboard", "Pie")
+    assert "101" == region.get("id")
+    assert "100" == pie.get("id")
+
+

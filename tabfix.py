@@ -10,8 +10,8 @@ p = XMLParser(huge_tree=True)
 
 def get_item(tree, dashboard_name, item):
     zone = get_view(tree, dashboard_name, item)
-    if zone is not None and zone.__len__() > 0:
-        zone = zone[0]
+    if zone is not None:
+        return zone
     if zone is None or zone.__len__() == 0:
         zone = get_button(tree, dashboard_name, item)
     if zone is None or zone.__len__() == 0:
@@ -167,41 +167,50 @@ def check_titles_and_captions(tree):
     return warnings
 
 
+def load_manifest(manifest_path):
+    with open(manifest_path, 'r') as file:
+        configuration = load(file, Loader=loader.SafeLoader)
+    return configuration
+
+
 def fix_tabs(input_filename, output_filename, configuration):
     with open(input_filename, 'r', encoding='utf-8') as f:  # open in readonly mode
         tree = parse(f, parser=p)
+        tree = fix_tabs_in_tree(tree, configuration)
+        tree.write(output_filename, encoding='utf-8')
 
-        zone_id = 0
-        for dashboard_name in configuration:
-            tab_order = configuration[dashboard_name]
-            zone_id += 100
 
-            # Start providing IDs for the named items
-            for item in tab_order:
-                zone = get_item(tree, dashboard_name, item)
-                if zone is not None:
-                    zone.set("id", zone_id.__str__())
-                    zone.set("is-modified", '1')
-                    zone_id += 1
-                else:
-                    print("ERROR in manifest: object '"+item+"' does not exist in dashboard '"+dashboard_name+"'")
+def fix_tabs_in_tree(tree, configuration):
+    zone_id = 0
+    for dashboard_name in configuration:
+        tab_order = configuration[dashboard_name]
+        zone_id += 100
 
-            # Add IDs to everything else in document order
-            zones = tree.xpath('//dashboard[@name="' + dashboard_name + '"]//zone')
-            for zone in zones:
-                if not zone.get("is-modified"):
-                    zone.set("id", zone_id.__str__())
-                    zone_id += 1
+        # Start providing IDs for the named items
+        for item in tab_order:
+            zone = get_item(tree, dashboard_name, item)
+            if zone is not None:
+                zone.set("id", zone_id.__str__())
+                zone.set("is-modified", '1')
+                zone_id += 1
+            else:
+                print("ERROR in manifest: object '"+item+"' does not exist in dashboard '"+dashboard_name+"'")
 
-            dashboard = tree.find("//dashboard[@name='"+dashboard_name+"']")
+        # Add IDs to everything else in document order
+        zones = tree.xpath('//dashboard[@name="' + dashboard_name + '"]//zone')
+        for zone in zones:
+            if not zone.get("is-modified"):
+                zone.set("id", zone_id.__str__())
+                zone_id += 1
 
-            # TODO handle device layouts properly
-            # Duplicate IDs in device layouts cause problems so get rid of them...
-            layouts = dashboard.find("devicelayouts")
-            if layouts is not None:
-                dashboard.remove(layouts)
+        dashboard = tree.find("//dashboard[@name='"+dashboard_name+"']")
 
-    tree.write(output_filename, encoding='utf-8')
+        # TODO handle device layouts properly
+        # Duplicate IDs in device layouts cause problems so get rid of them...
+        layouts = dashboard.find("devicelayouts")
+        if layouts is not None:
+            dashboard.remove(layouts)
+    return tree
 
 
 if __name__ == "__main__":
@@ -243,8 +252,7 @@ if __name__ == "__main__":
             print("Manifest: " + manifest_path)
 
             # Load the configuration/manifest
-        with open(manifest_path, 'r') as file:
-            configuration = load(file, Loader=loader.SafeLoader)
+            configuration = load_manifest(manifest_path)
             fix_tabs(input_path, output_path, configuration)
 
     warnings = check_accessibility(input_path)
