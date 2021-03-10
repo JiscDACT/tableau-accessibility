@@ -33,7 +33,11 @@ def get_parent_worksheet(item):
 
 
 def get_parent_dashboard(item):
-    return get_parent_tag(item, 'dashboard').get("name")
+    return get_parent_tag(item, 'dashboard')
+
+
+def get_parent_dashboard_name(item):
+    return get_parent_dashboard(item).get("name")
 
 
 def get_parent_zone(item):
@@ -94,7 +98,7 @@ def check_mark_labels(tree):
         zones = tree.xpath("//zone[@name='"+sheet+"']")
         for zone in zones:
             if zone.get('_.fcp.SetMembershipControl.false...type') is None and zone.get("type") is None:
-                dashboard_name = get_parent_dashboard(zone)
+                dashboard_name = get_parent_dashboard_name(zone)
                 warnings.append(
                     {
                         "code": "B3",
@@ -113,7 +117,7 @@ def check_vertical_text(tree):
         zones = tree.xpath("//zone[@name='"+sheet+"']")
         for zone in zones:
             if zone.get('_.fcp.SetMembershipControl.false...type') is None and zone.get("type") is None:
-                dashboard_name = get_parent_dashboard(zone)
+                dashboard_name = get_parent_dashboard_name(zone)
                 warnings.append(
                     {
                         "code": "B1",
@@ -130,7 +134,7 @@ def check_alt_text(tree):
     images = tree.xpath("//zone[@_.fcp.SetMembershipControl.false...type='bitmap' or @type='bitmap']")
     for image in images:
         if not image.get("alt-text") or image.get("alt-text") == '':
-            dashboard_name = get_parent_dashboard(image)
+            dashboard_name = get_parent_dashboard_name(image)
             warnings.append(
                 {
                     "code": "A4",
@@ -146,7 +150,7 @@ def check_titles_and_captions(tree):
     zones = tree.xpath("//zone[@name]")
     for zone in zones:
         if zone.get('_.fcp.SetMembershipControl.false...type') is None and zone.get("type") is None:
-            dashboard_name = get_parent_dashboard(zone)
+            dashboard_name = get_parent_dashboard_name(zone)
             item = zone.get('name')
             if zone.get('show-title') and zone.get('show-title') == 'false':
                 warnings.append(

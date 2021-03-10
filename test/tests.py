@@ -1,4 +1,5 @@
 import tabfix
+import lxml
 from lxml.etree import XMLParser, parse
 import pytest
 
@@ -10,6 +11,30 @@ p = XMLParser(huge_tree=True)
 def xml_fixture():
     tree = parse(test_filename, parser=p)
     return tree
+
+
+def test_get_parent():
+    tree = lxml.etree.fromstring("<apple><banana></banana></apple>")
+    banana = tree.xpath("//banana")[0]
+    apple = tabfix.get_parent_tag(banana, "apple")
+    assert apple is not None
+    assert apple.tag == 'apple'
+
+
+def test_get_parent_dashboard():
+    tree = lxml.etree.fromstring("<dashboard><a><banana></banana></a></dashboard>")
+    banana = tree.xpath("//banana")[0]
+    dashboard = tabfix.get_parent_dashboard(banana)
+    assert dashboard is not None
+    assert dashboard.tag == 'dashboard'
+
+
+def test_get_parent_worksheet():
+    tree = lxml.etree.fromstring("<dashboard><worksheet><a><banana></banana></a></worksheet></dashboard>")
+    banana = tree.xpath("//banana")[0]
+    sheet = tabfix.get_parent_worksheet(banana)
+    assert sheet is not None
+    assert sheet.tag == 'worksheet'
 
 
 def test_get_view(xml_fixture):
