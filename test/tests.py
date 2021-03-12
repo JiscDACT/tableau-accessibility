@@ -3,14 +3,21 @@ import lxml
 from lxml.etree import XMLParser, parse
 import pytest
 
-test_filename='testing.twb'
 p = XMLParser(huge_tree=True)
 
 
 @pytest.fixture
-def xml_fixture():
-    tree = parse(test_filename, parser=p)
-    return tree
+def xml_files():
+    return {
+        1: parse('testing.twb', parser=p),
+        2: parse('testing_2019_4.twb', parser=p)
+    }
+
+
+@pytest.fixture(params=[1, 2])
+def xml_fixture(request, xml_files):
+    """Parametrized backend instance."""
+    return xml_files[request.param]
 
 
 def test_get_parent():
