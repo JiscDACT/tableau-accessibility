@@ -1,7 +1,7 @@
 from lxml.etree import XMLParser, parse
 import argparse
 import os
-import sys
+import csv
 from yaml import load, loader
 
 # We need to use the 'huge' parser as these docs are really big
@@ -139,7 +139,7 @@ def check_alt_text(tree):
                 {
                     "code": "A4",
                     "dashboard": dashboard_name,
-                    "item": image,
+                    "item": image.get("param"),
                     "message": "A4 image with missing alternative text in dashboard '" + dashboard_name + "'"
                 })
     return warnings
@@ -228,6 +228,8 @@ if __name__ == "__main__":
                         help='The manifest file')
     argparser.add_argument('-t', action='store_true',
                         help='Just check for issues without modifying focus order')
+    argparser.add_argument('-c', action='store_true',
+                        help='Output results in CSV format')
 
     args = argparser.parse_args()
 
@@ -236,6 +238,7 @@ if __name__ == "__main__":
     output_path = vars(args)['output_path']
     manifest_path = vars(args)['manifest_path']
     check_only = vars(args)['t']
+    csv_output = vars(args)['c']
 
     if not os.path.exists(input_path):
         print('Input workbook does not exist')
@@ -265,3 +268,11 @@ if __name__ == "__main__":
 
     print("Note that this tool cannot check for a number of common accessibility issues (codes A1, A2, A3, A7, B2, "
           "B4, B5, B6) and you should check these using other methods.")
+
+    if csv_output:
+        print("Saving a report of issues found in accessibility_report.csv")
+        field_names = warnings[0].keys()
+        with open('accessibility_report.csv', 'w', newline='') as csvFile:
+            writer = csv.DictWriter(csvFile, fieldnames=field_names)
+            writer.writeheader()
+            writer.writerows(warnings)
