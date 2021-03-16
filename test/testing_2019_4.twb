@@ -410,7 +410,7 @@
                   <format attr='margin' value='4' />
                 </zone-style>
               </zone>
-              <zone h='22973' id='112' is-scaled='1' param='//labsdc1.analytics.jisc.ac.uk/DataPrepAreas/SpecialProjects/_Standards/Branding/Icons and Logos/Jisc Logo.png' type='bitmap' w='48768' x='1231' y='7005'>
+              <zone h='22973' id='112' is-scaled='1' param='/Users/scottw/Pictures/1114.jpg' type='bitmap' w='48768' x='1231' y='7005'>
                 <zone-style>
                   <format attr='border-color' value='#000000' />
                   <format attr='border-style' value='none' />
@@ -418,7 +418,7 @@
                   <format attr='margin' value='4' />
                 </zone-style>
               </zone>
-              <zone alt-text='Rabbit in a rabbit costume' h='11487' id='113' is-scaled='1' param='//labsdc1.analytics.jisc.ac.uk/DataPrepAreas/SpecialProjects/_Standards/Branding/Icons and Logos/Jisc Logo.png' type='bitmap' w='24385' x='49999' y='7005'>
+              <zone alt-text='Rabbit in a rabbit costume' h='11487' id='113' is-scaled='1' param='/Users/scottw/Pictures/1114.jpg' type='bitmap' w='24385' x='49999' y='7005'>
                 <zone-style>
                   <format attr='border-color' value='#000000' />
                   <format attr='border-style' value='none' />

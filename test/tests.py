@@ -79,6 +79,16 @@ def test_get_filter(xml_fixture):
     assert tabfix.get_filter(xml_fixture, 'Dashboard', 'Parameter 1') is None
 
 
+def test_get_image(xml_fixture):
+    assert tabfix.get_image(xml_fixture, 'Dashboard', '1114.jpg') is not None
+    assert tabfix.get_image(xml_fixture, 'Dashboard', '1114.jpg').tag == 'zone'
+    assert tabfix.get_image(xml_fixture, 'Dashboard', 'fake filter') is None
+    # This is a view
+    assert tabfix.get_image(xml_fixture, 'Dashboard', 'Pie') is None
+    # This is a parameter
+    assert tabfix.get_image(xml_fixture, 'Dashboard', 'Parameter 1') is None
+
+
 def test_check_mark_labels(xml_fixture):
     assert tabfix.check_mark_labels(xml_fixture) is not None
     assert tabfix.check_mark_labels(xml_fixture).__len__() == 3
