@@ -10,14 +10,16 @@ p = XMLParser(huge_tree=True)
 
 def get_item(tree, dashboard_name, item):
     zone = get_view(tree, dashboard_name, item)
-    if zone is not None:
-        return zone
-    if zone is None or zone.__len__() == 0:
+    if zone is None:
         zone = get_button(tree, dashboard_name, item)
-    if zone is None or zone.__len__() == 0:
+    if zone is None:
         zone = get_parameter(tree, dashboard_name, item)
-    if zone is None or zone.__len__() == 0:
+    if zone is None:
         zone = get_filter(tree, dashboard_name, item)
+    if zone is None:
+        zone = get_text(tree, dashboard_name, item)
+    if zone is None:
+        zone = get_image(tree, dashboard_name, item)
     return zone
 
 
@@ -44,6 +46,24 @@ def get_parent_zone(item):
     return get_parent_tag(item, 'zone')
 
 
+def get_image(tree, dashboard_name, path):
+    match = "substring(@param, string-length(@param) - string-length('"+path+"') + 1) = '"+path+"'"
+    query = ".//zone[(@_.fcp.SetMembershipControl.false...type='bitmap' or @type='bitmap') and "+match+"]"
+    image = tree.xpath(query)
+    if image is not None and image.__len__() > 0:
+        zone = image[0]
+        return zone
+    return None
+
+
+def get_text(tree, dashboard_name, text):
+    view = tree.xpath("//dashboard[@name='" + dashboard_name + "']//run[text()='" + text + "']")
+    if view is not None and view.__len__() > 0:
+        zone = view[0]
+        return zone
+    return None
+
+
 def get_view(tree, dashboard_name, view):
     view = tree.xpath("//dashboard[@name='" + dashboard_name + "']//zone[@name='" + view + "']")
     if view is not None and view.__len__() > 0:
@@ -60,22 +80,65 @@ def get_button(tree, dashboard_name, caption):
     return None
 
 
+def get_parameter_by_alias(tree, alias):
+    # column caption='The First Parameter' datatype='string' name='[Parameter 1]'
+    reference = tree.xpath("//column[@caption='" + alias + "' and starts-with(@name, '[Parameter ')]")
+    if reference is not None and reference.__len__() > 0:
+        return reference[0].get("name")
+    return None
+
+
 # TODO ensure this works with 2019.4
 def get_parameter(tree, dashboard_name, parameter):
     param = '[Parameters].['+parameter+']'
-    parameter = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@param='" + param + "']")
-    if parameter is not None and parameter.__len__() > 0:
-        zone = parameter[0]
+    parameters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@param='" + param + "']")
+    if parameters is not None and parameters.__len__() > 0:
+        zone = parameters[0]
         return zone
+
+    # Parameter with a custom title
+    parameters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@type='paramctrl']/formatted-text/run[text()='"+parameter+"']")
+    if parameters is not None and parameters.__len__() > 0:
+        zone = parameters[0]
+        return zone
+
+    # Parameters with aliases
+    reference = get_parameter_by_alias(tree, parameter)
+    if reference is not None:
+        param = '[Parameters].' + reference
+        parameters = tree.xpath(".//dashboard[@name='" + dashboard_name + "']//zone[@param='" + param + "']")
+        if parameters is not None and parameters.__len__() > 0:
+            zone = parameters[0]
+            return zone
+
+    return None
+
+
+def get_filter_by_alias(tree, alias):
+    reference = tree.xpath("//column[@caption='" + alias + "']")
+    if reference is not None and reference.__len__() > 0:
+        name = reference[0].get("name")
+        if name.startswith('[') and name.endswith(']'):
+            name = name[1:-1]
+        return name
     return None
 
 
 def get_filter(tree, dashboard_name, filter):
-    filter = ':'+filter+':'
-    parameter = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[contains(@param, '" + filter + "')]")
+    filter_search = ':'+filter+':'
+    parameter = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[contains(@param, '" + filter_search + "')]")
     if parameter is not None and parameter.__len__() > 0:
         zone = parameter[0]
         return zone
+
+    reference = get_filter_by_alias(tree, filter)
+    if reference is not None:
+        filter_search = ':'+reference+':'
+        filters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[contains(@param, '" + filter_search + "')]")
+        if filters is not None and filters.__len__() > 0:
+            zone = filters[0]
+            return zone
+
     return None
 
 
@@ -135,12 +198,13 @@ def check_alt_text(tree):
     for image in images:
         if not image.get("alt-text") or image.get("alt-text") == '':
             dashboard_name = get_parent_dashboard_name(image)
+            short_name = image.get("param").split("/")[-1]
             warnings.append(
                 {
                     "code": "A4",
                     "dashboard": dashboard_name,
                     "item": image.get("param"),
-                    "message": "A4 image with missing alternative text in dashboard '" + dashboard_name + "'"
+                    "message": "A4 image '"+short_name+"' with missing alternative text in dashboard '" + dashboard_name + "'"
                 })
     return warnings
 

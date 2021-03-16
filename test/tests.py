@@ -124,4 +124,11 @@ def test_fix_tabs(xml_fixture):
     assert "101" == region.get("id")
     assert "100" == pie.get("id")
 
+    configuration = {"Dashboard": ["The First Parameter", "Parameter 2"]}
+    tree = tabfix.fix_tabs_in_tree(xml_fixture, configuration)
+    p2 = tabfix.get_item(tree, "Dashboard", "Parameter 2")
+    p1 = tabfix.get_item(tree, "Dashboard", "The First Parameter")
+    assert "101" == p2.get("id")
+    assert "100" == p1.get("id")
+
 

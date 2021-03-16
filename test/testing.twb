@@ -24,7 +24,7 @@
   <datasources>
     <datasource hasconnection='false' inline='true' name='Parameters' version='18.1'>
       <aliases enabled='yes' />
-      <column caption='Parameter 1' datatype='string' name='[Parameter 1]' param-domain-type='list' role='measure' type='nominal' value='&quot;Banana&quot;'>
+      <column caption='The First Parameter' datatype='string' name='[Parameter 1]' param-domain-type='list' role='measure' type='nominal' value='&quot;Banana&quot;'>
         <calculation class='tableau' formula='&quot;Banana&quot;' />
         <members>
           <member value='&quot;Banana&quot;' />
@@ -112,7 +112,7 @@
         <drill-path name='Country/Region, State/Province, City' />
       </drill-paths>
       <extract _.fcp.ObjectModelExtractV2.true...object-id='' count='-1' enabled='true' units='records'>
-        <connection access_mode='readonly' author-locale='en_GB' class='hyper' dbname='/Users/scottw/Documents/workspace/tableau-accessibility/testing.twb Files/Data/tableau-temp/#TableauTemp_1xbyf5b1hqb7cg1cqs2in187rcvn.hyper' default-settings='hyper' schema='Extract' sslmode='' tablename='Extract' update-time='01/21/2021 12:08:26 PM' username='tableau_internal_user'>
+        <connection access_mode='readonly' author-locale='en_GB' class='hyper' dbname='/Users/scottw/Documents/workspace/tableau-accessibility/test/testing.twb Files/Data/tableau-temp/#TableauTemp_1xbyf5b1hqb7cg1cqs2in187rcvn.hyper' default-settings='hyper' schema='Extract' sslmode='' tablename='Extract' update-time='01/21/2021 12:08:26 PM' username='tableau_internal_user'>
           <_.fcp.ObjectModelEncapsulateLegacy.false...relation name='Extract' table='[Extract].[Extract]' type='table' />
           <_.fcp.ObjectModelEncapsulateLegacy.true...relation name='Extract' table='[Extract].[Extract]' type='table' />
           <metadata-records>
@@ -378,7 +378,7 @@
         <datasource caption='Sample - EU Superstore' name='federated.1p1dkhb0300j8l10aofes0d1111t' />
       </datasources>
       <datasource-dependencies datasource='Parameters'>
-        <column caption='Parameter 1' datatype='string' name='[Parameter 1]' param-domain-type='list' role='measure' type='nominal' value='&quot;Banana&quot;'>
+        <column caption='The First Parameter' datatype='string' name='[Parameter 1]' param-domain-type='list' role='measure' type='nominal' value='&quot;Banana&quot;'>
           <calculation class='tableau' formula='&quot;Banana&quot;' />
           <members>
             <member value='&quot;Banana&quot;' />
@@ -501,7 +501,7 @@
         <datasource caption='Sample - EU Superstore' name='federated.1p1dkhb0300j8l10aofes0d1111t' />
       </datasources>
       <datasource-dependencies datasource='Parameters'>
-        <column caption='Parameter 1' datatype='string' name='[Parameter 1]' param-domain-type='list' role='measure' type='nominal' value='&quot;Banana&quot;'>
+        <column caption='The First Parameter' datatype='string' name='[Parameter 1]' param-domain-type='list' role='measure' type='nominal' value='&quot;Banana&quot;'>
           <calculation class='tableau' formula='&quot;Banana&quot;' />
           <members>
             <member value='&quot;Banana&quot;' />
@@ -693,7 +693,7 @@
         </viewpoint>
         <viewpoint name='Pie' />
       </viewpoints>
-      <active id='119' />
+      <active id='-1' />
       <simple-id uuid='{1E2B6F8A-F3F0-48D0-832E-75269925E1A4}' />
     </window>
     <window class='dashboard' name='Other Dashboard'>
