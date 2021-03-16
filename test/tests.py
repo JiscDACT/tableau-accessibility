@@ -46,12 +46,14 @@ def test_get_parent_worksheet():
 
 def test_get_view(xml_fixture):
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'Pie') is not None
+    assert tabfix.get_view(xml_fixture, 'Dashboard', 'Pie').tag == 'zone'
     # This is a button
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'navigate to other dashboard') is None
 
 
 def test_get_button(xml_fixture):
     assert tabfix.get_button(xml_fixture, 'Dashboard', 'navigate to other dashboard') is not None
+    assert tabfix.get_button(xml_fixture, 'Dashboard', 'navigate to other dashboard').tag == 'zone'
     assert tabfix.get_button(xml_fixture, 'Dashboard', 'fake button') is None
     # This is a view
     assert tabfix.get_button(xml_fixture, 'Dashboard', 'Pie') is None
@@ -59,6 +61,7 @@ def test_get_button(xml_fixture):
 
 def test_get_parameter(xml_fixture):
     assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Parameter 1') is not None
+    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Parameter 1').tag == 'zone'
     assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'fake parameter') is None
     # This is a view
     assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Pie') is None
@@ -68,6 +71,7 @@ def test_get_parameter(xml_fixture):
 
 def test_get_filter(xml_fixture):
     assert tabfix.get_filter(xml_fixture, 'Dashboard', 'Region') is not None
+    assert tabfix.get_filter(xml_fixture, 'Dashboard', 'Region').tag == 'zone'
     assert tabfix.get_filter(xml_fixture, 'Dashboard', 'fake filter') is None
     # This is a view
     assert tabfix.get_filter(xml_fixture, 'Dashboard', 'Pie') is None

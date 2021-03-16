@@ -59,7 +59,7 @@ def get_image(tree, dashboard_name, path):
 def get_text(tree, dashboard_name, text):
     view = tree.xpath("//dashboard[@name='" + dashboard_name + "']//run[text()='" + text + "']")
     if view is not None and view.__len__() > 0:
-        zone = view[0]
+        zone = get_parent_zone(view[0])
         return zone
     return None
 
@@ -99,7 +99,7 @@ def get_parameter(tree, dashboard_name, parameter):
     # Parameter with a custom title
     parameters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@type='paramctrl']/formatted-text/run[text()='"+parameter+"']")
     if parameters is not None and parameters.__len__() > 0:
-        zone = parameters[0]
+        zone = get_parent_zone(parameters[0])
         return zone
 
     # Parameters with aliases
