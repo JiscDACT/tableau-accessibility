@@ -20,6 +20,11 @@ def xml_fixture(request, xml_files):
     return xml_files[request.param]
 
 
+@pytest.fixture()
+def xml_fixture_2020():
+    return parse('testing.twb', parser=p)
+
+
 def test_get_parent():
     tree = lxml.etree.fromstring("<apple><banana></banana></apple>")
     banana = tree.xpath("//banana")[0]
@@ -48,6 +53,7 @@ def test_get_view(xml_fixture):
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'Pie') is not None
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'Pie').tag == 'zone'
     # This is a button
+    assert tabfix.get_view(xml_fixture, 'Dashboard', 'The First Parameter') is None
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'navigate to other dashboard') is None
 
 
@@ -138,11 +144,21 @@ def test_fix_tabs(xml_fixture):
     assert "101" == region.get("id")
     assert "100" == pie.get("id")
 
-    configuration = {"Dashboard": ["The First Parameter", "Parameter 2"]}
+    configuration = {"Dashboard": ["Pie", "Parameter 2", "Region"]}
     tree = tabfix.fix_tabs_in_tree(xml_fixture, configuration)
+    p2 = tabfix.get_item(tree, "Dashboard", "Parameter 2")
+    region = tabfix.get_item(tree, "Dashboard", "Region")
+    pie = tabfix.get_item(tree, "Dashboard", "Pie")
+    assert "100" == pie.get("id")
+    assert "101" == p2.get("id")
+    assert "102" == region.get("id")
+
+
+def test_fix_tabs_2(xml_fixture_2020):
+    configuration = {"Dashboard": ["The First Parameter", "Parameter 2"]}
+    tree = tabfix.fix_tabs_in_tree(xml_fixture_2020, configuration)
     p2 = tabfix.get_item(tree, "Dashboard", "Parameter 2")
     p1 = tabfix.get_item(tree, "Dashboard", "The First Parameter")
     assert "101" == p2.get("id")
     assert "100" == p1.get("id")
-
 

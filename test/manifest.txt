@@ -1,10 +1,12 @@
 Dashboard:
 - navigate to other dashboard
-- Region
-- Parameter 2
-- Parameter 1
+- Introduction! Read me first!
+- 1114.jpg
 - Pie
+- Parameter 2
+- The First Parameter
 - Bar With Mark Labels
+- Region
 - Bar Without Mark Labels
 - '% blah'
 Other Dashboard:
