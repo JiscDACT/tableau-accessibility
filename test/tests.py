@@ -51,7 +51,13 @@ def test_get_parent_worksheet():
 
 def test_get_view(xml_fixture):
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'Pie') is not None
+    assert tabfix.get_view(xml_fixture, 'Dashboard', 'Pie').__len__() == 1
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'Pie').tag == 'zone'
+
+    assert tabfix.get_view(xml_fixture, 'Other Dashboard', 'Bar Without Mark Labels') is not None
+    assert tabfix.get_view(xml_fixture, 'Other Dashboard', 'Bar Without Mark Labels').__len__() == 1
+    assert tabfix.get_view(xml_fixture, 'Other Dashboard', 'Bar Without Mark Labels').tag == 'zone'
+
     # This is a button
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'The First Parameter') is None
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'navigate to other dashboard') is None

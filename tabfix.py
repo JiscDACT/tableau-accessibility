@@ -65,7 +65,7 @@ def get_text(tree, dashboard_name, text):
 
 
 def get_view(tree, dashboard_name, viewname):
-    view = tree.xpath("//dashboard[@name='" + dashboard_name + "']//zone[@name='" + viewname + "']")
+    view = tree.xpath("//dashboard[@name='" + dashboard_name + "']//zone[@name='" + viewname + "' and not(@param)]")
     if view is not None and view.__len__() > 0:
         zone = view[0]
         return zone
