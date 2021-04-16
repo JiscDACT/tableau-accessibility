@@ -48,7 +48,7 @@ def get_parent_zone(item):
 
 def get_image(tree, dashboard_name, path):
     match = "substring(@param, string-length(@param) - string-length('"+path+"') + 1) = '"+path+"'"
-    query = ".//zone[(@_.fcp.SetMembershipControl.false...type='bitmap' or @type='bitmap') and "+match+"]"
+    query = ".//dashboard[@name='" + dashboard_name + "']//zone[(@_.fcp.SetMembershipControl.false...type='bitmap' or @type='bitmap') and "+match+"]"
     image = tree.xpath(query)
     if image is not None and image.__len__() > 0:
         zone = image[0]
