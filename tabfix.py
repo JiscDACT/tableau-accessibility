@@ -20,6 +20,8 @@ def get_item(tree, dashboard_name, item):
         zone = get_text(tree, dashboard_name, item)
     if zone is None:
         zone = get_image(tree, dashboard_name, item)
+    if zone is None:
+        zone = get_highlighter_by_filter(tree, dashboard_name, item)
     return zone
 
 
@@ -80,6 +82,16 @@ def get_button(tree, dashboard_name, caption):
     return None
 
 
+def get_highlighter_by_filter(tree, dashboard_name, filter):
+    highlighters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@type='highlighter' and contains(@param, ':" + filter + ":')]")
+    if highlighters is not None and highlighters.__len__() > 0:
+        return highlighters[0]
+    highlighters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@_.fcp.SetMembershipControl.true...type-v2='highlighter' and contains(@param, ':" + filter + ":')]")
+    if highlighters is not None and highlighters.__len__() > 0:
+        return highlighters[0]
+    return None
+
+
 def get_parameter_by_alias(tree, alias):
     # column caption='The First Parameter' datatype='string' name='[Parameter 1]'
     reference = tree.xpath("//column[@caption='" + alias + "' and starts-with(@name, '[Parameter ')]")
@@ -98,6 +110,12 @@ def get_parameter(tree, dashboard_name, parameter):
 
     # Parameter with a custom title
     parameters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@type='paramctrl']/formatted-text/run[text()='"+parameter+"']")
+    if parameters is not None and parameters.__len__() > 0:
+        zone = get_parent_zone(parameters[0])
+        return zone
+
+    # Parameter with a custom title for later versions
+    parameters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@_.fcp.SetMembershipControl.true...type-v2='paramctrl'='paramctrl']/formatted-text/run[text()='"+parameter+"']")
     if parameters is not None and parameters.__len__() > 0:
         zone = get_parent_zone(parameters[0])
         return zone

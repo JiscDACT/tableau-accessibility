@@ -49,6 +49,12 @@ def test_get_parent_worksheet():
     assert sheet.tag == 'worksheet'
 
 
+def test_get_highlighter_by_filter(xml_fixture_2020):
+    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Region') is not None
+    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Region').__len__() == 1
+    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Region').tag == 'zone'
+
+
 def test_get_view(xml_fixture):
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'Pie') is not None
     assert tabfix.get_view(xml_fixture, 'Dashboard', 'Pie').__len__() == 1
@@ -71,9 +77,19 @@ def test_get_button(xml_fixture):
     assert tabfix.get_button(xml_fixture, 'Dashboard', 'Pie') is None
 
 
-def test_get_parameter(xml_fixture):
-    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Parameter 1') is not None
-    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Parameter 1').tag == 'zone'
+def test_get_parameter_by_name(xml_fixture):
+    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Parameter 1 Name') is not None
+    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Parameter 1 Name').tag == 'zone'
+    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'fake parameter') is None
+    # This is a view
+    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Pie') is None
+    # This is a filter
+    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Region') is None
+
+
+def test_get_parameter_by_title(xml_fixture):
+    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Parameter 1 Title') is not None
+    assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Parameter 1 Title').tag == 'zone'
     assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'fake parameter') is None
     # This is a view
     assert tabfix.get_parameter(xml_fixture, 'Dashboard', 'Pie') is None
@@ -161,10 +177,10 @@ def test_fix_tabs(xml_fixture):
 
 
 def test_fix_tabs_2(xml_fixture_2020):
-    configuration = {"Dashboard": ["The First Parameter", "Parameter 2"]}
+    configuration = {"Dashboard": ["Parameter 1 Name", "Parameter 2"]}
     tree = tabfix.fix_tabs_in_tree(xml_fixture_2020, configuration)
     p2 = tabfix.get_item(tree, "Dashboard", "Parameter 2")
-    p1 = tabfix.get_item(tree, "Dashboard", "The First Parameter")
+    p1 = tabfix.get_item(tree, "Dashboard", "Parameter 1 Name")
     assert "101" == p2.get("id")
     assert "100" == p1.get("id")
 
