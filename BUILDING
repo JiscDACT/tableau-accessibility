@@ -1,2 +1,9 @@
+1. CD to the root folder of this project
+
+2. Activate Python:
+
 venv\Scripts\activate
+
+3. Run the .exe builder:
+
 pyinstaller -F tabfix.py
