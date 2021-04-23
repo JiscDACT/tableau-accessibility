@@ -6,6 +6,12 @@ venv\Scripts\activate
 
 3. Run the .exe builder:
 
+If you haven't installed pyinstaller yet, install using:
+
+pip install pyinstaller
+
+Then to create the .exe:
+
 pyinstaller -F tabfix.py
 
 When the build completes, there will be a 'tabfix.exe' in the dist directory. Upload this using SFTP.
