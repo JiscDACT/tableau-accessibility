@@ -43,6 +43,16 @@ Tabfix can't currently check A2, A3, A7, B2, B4, B5 and B6.
 It may be possible in future to extend Tabfix to check A2 and B5.
 
 ## Specifying the focus order using a manifest file
+You can use a manifest file in YAML format to specify the focus order
+for a dashboard. There is an example of a manifest file in the test subfolder.
+
+For most dashboard items you can use either the name or title of the item; view names, 
+filter titles, parameter names and so on. For images that use links, you need to use
+the image filename. For highlighters, use "Highlight" with an associated filter name, 
+e.g. "Highlight Region".
+
+This can cause problems if, for example, a filter and a parameter have the same name. 
+You'll need to rename one of them to prevent a clash.
 
 ## Known issues and limitations
 Tabfix currently has problems with fixing the focus order where there are 

@@ -158,7 +158,7 @@ def test_check_titles_and_captions(xml_fixture):
 
 
 def test_load_manifest():
-    assert tabfix.load_manifest('manifest.txt') is not None
+    assert tabfix.load_manifest('manifest.yaml') is not None
 
 
 def test_fix_tabs(xml_fixture):
