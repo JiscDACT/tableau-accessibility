@@ -83,12 +83,14 @@ def get_button(tree, dashboard_name, caption):
 
 
 def get_highlighter_by_filter(tree, dashboard_name, filter):
-    highlighters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@type='highlighter' and contains(@param, ':" + filter + ":')]")
-    if highlighters is not None and highlighters.__len__() > 0:
-        return highlighters[0]
-    highlighters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@_.fcp.SetMembershipControl.true...type-v2='highlighter' and contains(@param, ':" + filter + ":')]")
-    if highlighters is not None and highlighters.__len__() > 0:
-        return highlighters[0]
+    if filter.startswith("Highlight "):
+        filter = filter.split("Highlight ")[1]
+        highlighters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@type='highlighter' and contains(@param, ':" + filter + ":')]")
+        if highlighters is not None and highlighters.__len__() > 0:
+            return highlighters[0]
+        highlighters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@_.fcp.SetMembershipControl.true...type-v2='highlighter' and contains(@param, ':" + filter + ":')]")
+        if highlighters is not None and highlighters.__len__() > 0:
+            return highlighters[0]
     return None
 
 

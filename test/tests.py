@@ -50,9 +50,19 @@ def test_get_parent_worksheet():
 
 
 def test_get_highlighter_by_filter(xml_fixture_2020):
-    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Region') is not None
-    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Region').__len__() == 1
-    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Region').tag == 'zone'
+    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Highlight Region') is not None
+    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Highlight Region').__len__() == 1
+    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Highlight Region').tag == 'zone'
+    assert tabfix.get_highlighter_by_filter(xml_fixture_2020, 'Dashboard', 'Region') is None
+
+
+def test_get_highlighter(xml_fixture_2020):
+    assert tabfix.get_item(xml_fixture_2020, "Dashboard", "Highlight Region") is not None
+    assert(tabfix.get_item(xml_fixture_2020, "Dashboard", "Highlight Region").
+           get("_.fcp.SetMembershipControl.false...type") == "highlighter")
+    assert tabfix.get_item(xml_fixture_2020, "Dashboard", "Region") is not None
+    assert(tabfix.get_item(xml_fixture_2020, "Dashboard", "Region").
+           get("_.fcp.SetMembershipControl.false...type") != "highlighter")
 
 
 def test_get_view(xml_fixture):
