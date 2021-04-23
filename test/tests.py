@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 import tabfix
 import lxml
 from lxml.etree import XMLParser, parse

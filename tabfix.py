@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 from lxml.etree import XMLParser, parse
 import argparse
 import os
@@ -102,7 +103,6 @@ def get_parameter_by_alias(tree, alias):
     return None
 
 
-# TODO ensure this works with 2019.4
 def get_parameter(tree, dashboard_name, parameter):
     param = '[Parameters].['+parameter+']'
     parameters = tree.xpath(".//dashboard[@name='"+dashboard_name+"']//zone[@param='" + param + "']")
@@ -211,7 +211,6 @@ def check_vertical_text(tree):
     return warnings
 
 
-# TODO ensure this works with 2019.4
 def check_alt_text(tree):
     warnings = []
     images = tree.xpath("//zone[@_.fcp.SetMembershipControl.false...type='bitmap' or @type='bitmap']")
