@@ -1,6 +1,6 @@
 # Tabfix
 
-*A command-line tool for Tableau accessibility*
+*A command-line tool for improving Tableau accessibility*
 
 ## How does it work?
 Tabfix inspects the Tableau XML file (.twb) and checks a number of assertions related to accessibility, 
@@ -8,8 +8,62 @@ such as whether a worksheet has a title and caption, whether any text is display
 vertically, or if images lack alternative text.
 
 ## Installing
+To install the pre-built .exe on Windows, 
+download it and add the location to your system Path.
 
 ## Running
+Either run the pre-built tabfix.exe from the command line, or run the script
+using Python.
+
+### Usage - setting  keyboard navigation order
+Before running Tabfix, create a file called manifest.yaml in the same folder as your Tableau workbook. Edit this file and create the tab order you want the workbook to use. For example: 
+~~~
+Dashboard:
+- Region
+- Parameter 2
+- Parameter 1
+- Pie
+- Bar
+Other Dashboard:
+- Parameter 1
+- Parameter 2
+- Pie
+- Bar
+- Region
+~~~
+
+
+Each dashboard name must be on a newline ending in a colon. Each dashboard item must be on a new line starting with a dash and space. 
+
+You may use view names, filter names, and parameter names. Note that names that begin with numbers or symbols such as '%' should be enclosed in quotes. 
+
+For buttons, use the button label rather than "Button". 
+
+Tableau does not provide keyboard access to text objects or images. 
+
+You run Tabfix from the Windows command prompt (CMD).  You can quickly open this by right-clicking the Windows icon in the bottom-right of the screen. 
+
+Navigate to the folder containing your workbook, and enter: 
+
+`tabfix your-workbook-name.twb manifest.yaml`
+
+By default, Tabfix will output the results in a new workbook, output.twb, using the specification in manifest.txt. 
+
+Note that if your workbook name contains spaces, you should enclose it in quotation marks. 
+
+
+### Usage – testing for accessibility issues 
+You can run tabfix to just check accessibility issues. To do this, navigate to the folder containing your workbook, and enter: 
+
+`tabfix your-workbook-name.twb -t `
+
+
+### Usage – accessiblity report in CSV format 
+You can output the results of the accessibility check in CSV format. To do this, use the –c option, e.g.: 
+
+`tabfix your-workbook-name.twb -t -c `
+
+The report will be saved as accessibility_report.csv in your current folder. 
 
 ## Tableau accessibility issues
 
