@@ -14,7 +14,7 @@ jobs:
         deploy:
           provider: releases
           api_key:
-            secure: "5JaMUTrrPFmZhPILTXQHwbJ2NwIFfBs02D5my7yyb7w3ZueqRZa+VXJu5msGVAMqCd5iL2vcnmYMzJKu8OHp0z9nJ6UVZN6IXzOhXj2vWwQaNsYRQzQe1bPe0C0gnIJm/b3gOezwa6+sx6/q6sFnHPqsJ4ZJ7h6iLn5g9Z2RyIR59mUDnZo5sTgSYvzVgzMkVhCivAqDyIr4NFJA6K4sw4LDxJ1oskFGSMc1xsRWmuh9K2LgPCr4BhscY9bskvTvyGSZ2XDCRWN3ZRcWWpdDdnjGp5dHkUGlhzFmGwhgVIz/c0mD5x+Fnndqgqgm/r/D4DGN/4y+LXyZhgeLVC96hiF9pzMD8AEdNCSV10U5qEK4LA1JJtzvjd36GNUCdZlQT9uIU8YfdGwJltS96/YNw1Fciw1aZ6ihsX16AkQgkhn5GhE309TvYFhDu4EatdgswxMx5N2TFU+wrfIxascEIUlwyBH/Fg0r7/4J503jNP6WpsmP8Y09qjlOi0BY3h66BXpl7WgpSGx+/hsIJ693Bbuo+NTnLOm5aOBCWKNvSjlOTaPkn++LIostE1Ml4iijnAeS6uH/sSJc75gzRVjGLuzgXo11Pc3CU9863P2VNYvkJDKSV3EnSf3TjP5vGkVfh0GOlbigEk3Iqfda7Y3eRQhgmJbhuhgApviGYbvWM2s="
+            secure: "g9t0pc9nHU2Zs8ZGptkCQx690UxQhY7YtX0JPuD5mG5qEHwUAk2PjxdohPVAN6lxHps2i/TPu9L9ILbh6hYYrmGOnCeWnIJZlM3MrjpjgL2L8DXIlJe7P8YCXNouu9lyPwK+AqmKC1+QHz7FWII087wUSYJBWdD8N6Tu8UQnFHFm8E3VCAGdmZNRoK7aF9c0ALvh8jTZAlI8PLpv/7CoAx5Xm8zaZTrSuDyfI0ZXhCD+5ZRKZJ9PghnSdqDhy1et3ZV0Sg749YSkj3FiF5Ovu42lOlCM3cb3obY6wgToW1QEcN0aVc8r/135oQwp5+OZ5j9zd0IlrtjETEDliK5/GVz2ionzm+G77dqNDveGScZdPpkyhg99aQR2Hd/xeKs6dH8scFk4fPW945jAiq02X0zxKaZYYEjDKtlIN+Zu1iGM5//w89+9D8qJWIFAzCTBvR2YerZxPNjSrHrplEQslvxpZNx0z1QuHB1v8+tRVShFh8Eq42UlwsO1Ci6dPf2bAMYjSl+KrNBCCop4yyyKBBLFdfvtfE/fpARi5Y8IkzGOJQoH77tsy48Brp9TwQGnXCzohLuXnhhdYEoDypySSy91JvbYia3cKzACLz/2IsN1CNDnlNn3LlFxu7ZerE2grsOcT6h8a3DDVXpzroiLjjrzdTBkgFDMTC08VrVxwaw="
           file_glob: true
           file: dist/tabfix.exe
           skip_cleanup: true
