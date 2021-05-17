@@ -3,15 +3,18 @@ import tabfix
 import lxml
 from lxml.etree import XMLParser, parse
 import pytest
+import os
 
 p = XMLParser(huge_tree=True)
+
+FIXTURE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
 @pytest.fixture
 def xml_files():
     return {
-        1: parse('testing.twb', parser=p),
-        2: parse('testing_2019_4.twb', parser=p)
+        1: parse(os.path.join(FIXTURE_DIR, 'testing.twb'), parser=p),
+        2: parse(os.path.join(FIXTURE_DIR, 'testing_2019_4.twb'), parser=p)
     }
 
 
@@ -23,7 +26,7 @@ def xml_fixture(request, xml_files):
 
 @pytest.fixture()
 def xml_fixture_2020():
-    return parse('testing.twb', parser=p)
+    return parse(os.path.join(FIXTURE_DIR, 'testing.twb'), parser=p)
 
 
 def test_get_parent():
@@ -159,7 +162,7 @@ def test_check_titles_and_captions(xml_fixture):
 
 
 def test_load_manifest():
-    assert tabfix.load_manifest('manifest.yaml') is not None
+    assert tabfix.load_manifest(os.path.join(FIXTURE_DIR, 'manifest.yaml')) is not None
 
 
 def test_fix_tabs(xml_fixture):
