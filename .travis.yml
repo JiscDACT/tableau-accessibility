@@ -10,7 +10,7 @@ jobs:
           - pip install -r requirements.txt
           - pip install pyinstaller
         before_deploy:
-          - pyinstaller -F pram.py
+          - pyinstaller -F tabfix.py
         deploy:
           provider: releases
           api_key:
