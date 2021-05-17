@@ -1,0 +1,41 @@
+jobs:
+  include:
+      - os: windows
+        language: shell
+        before_install:
+          - choco install python --version=3.7
+          - python -m pip install --upgrade pip
+        env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        install:
+          - pip install -r requirements.txt
+          - pip install pyinstaller
+        before_deploy:
+          - pyinstaller -F pram.py
+        deploy:
+          provider: releases
+          api_key:
+            secure: "5JaMUTrrPFmZhPILTXQHwbJ2NwIFfBs02D5my7yyb7w3ZueqRZa+VXJu5msGVAMqCd5iL2vcnmYMzJKu8OHp0z9nJ6UVZN6IXzOhXj2vWwQaNsYRQzQe1bPe0C0gnIJm/b3gOezwa6+sx6/q6sFnHPqsJ4ZJ7h6iLn5g9Z2RyIR59mUDnZo5sTgSYvzVgzMkVhCivAqDyIr4NFJA6K4sw4LDxJ1oskFGSMc1xsRWmuh9K2LgPCr4BhscY9bskvTvyGSZ2XDCRWN3ZRcWWpdDdnjGp5dHkUGlhzFmGwhgVIz/c0mD5x+Fnndqgqgm/r/D4DGN/4y+LXyZhgeLVC96hiF9pzMD8AEdNCSV10U5qEK4LA1JJtzvjd36GNUCdZlQT9uIU8YfdGwJltS96/YNw1Fciw1aZ6ihsX16AkQgkhn5GhE309TvYFhDu4EatdgswxMx5N2TFU+wrfIxascEIUlwyBH/Fg0r7/4J503jNP6WpsmP8Y09qjlOi0BY3h66BXpl7WgpSGx+/hsIJ693Bbuo+NTnLOm5aOBCWKNvSjlOTaPkn++LIostE1Ml4iijnAeS6uH/sSJc75gzRVjGLuzgXo11Pc3CU9863P2VNYvkJDKSV3EnSf3TjP5vGkVfh0GOlbigEk3Iqfda7Y3eRQhgmJbhuhgApviGYbvWM2s="
+          file_glob: true
+          file: dist/tabfix.exe
+          skip_cleanup: true
+          draft: true
+          on:
+            all_branches: true
+            tags: true
+      - language: python
+        python: 3.7
+        install:
+          - pip install pipenv
+          - pipenv install --dev --skip-lock
+        script:
+          pipenv run pytest -v
+        deploy:
+          provider: pypi
+          user: $TEST_PYPI_USER
+          password: $TEST_PYPI_PASS
+          distributions: "sdist bdist_wheel"
+          skip_existing: true
+          on:
+            all_branches: true
+            tags: true
+
