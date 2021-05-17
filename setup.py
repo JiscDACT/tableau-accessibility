@@ -3,7 +3,7 @@ from setuptools import setup
 VERSION = '1.0.1'
 
 setup(
-    name='tabfix',
+    name='tableau_accessibility_fixer',
     version=VERSION,
     py_modules=['tabfix'],
     url='https://github.com/scottbw/tableau-accessibility',
