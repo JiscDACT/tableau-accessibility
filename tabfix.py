@@ -300,6 +300,25 @@ def fix_tabs_in_tree(tree, configuration):
     return tree
 
 
+def generate_manifest_from_workbook(input_filename):
+    out = ''
+    with open(input_filename, 'r', encoding='utf-8') as f:  # open in readonly mode
+        tree = parse(f, parser=p)
+        # Get the dashboards
+        dashboards = tree.xpath('//dashboard')
+        for dashboard in dashboards:
+            out += dashboard.get("name") + ':\n'
+            views = tree.xpath('.//dashboard[@name=\''+dashboard.get("name")+'\']//zone[@name and not(@param)]')
+            for view in views:
+                out += '-' + view.get("name") + '\n'
+
+            images = tree.xpath(".//dashboard[@name='" + dashboard.get("name") + "']//zone[(@_.fcp.SetMembershipControl.false...type='bitmap' or @type='bitmap')]")
+            for image in images:
+                out += '-' + image.get("param") + '\n'
+    print(out)
+
+
+
 if __name__ == "__main__":
 
     argparser = argparse.ArgumentParser(description='Accessibility testing and tab focus order fixer for Tableau.')
@@ -313,6 +332,8 @@ if __name__ == "__main__":
                         help='Just check for issues without modifying focus order')
     argparser.add_argument('-c', action='store_true',
                         help='Output results in CSV format')
+    argparser.add_argument('-m', action='store_true',
+                        help='Generate a manifest from the workbook')
 
     args = argparser.parse_args()
 
@@ -322,6 +343,7 @@ if __name__ == "__main__":
     manifest_path = vars(args)['manifest_path']
     check_only = vars(args)['t']
     csv_output = vars(args)['c']
+    generate_manifest = vars(args)['m']
 
     if not os.path.exists(input_path):
         print('Input workbook does not exist')
@@ -331,6 +353,10 @@ if __name__ == "__main__":
 
     if check_only:
         print("Only checking for issues, will not create output")
+    elif generate_manifest:
+        print("Generating a manifest from the workbook")
+        generate_manifest_from_workbook(input_path)
+        exit()
     else:
         print("Modifying tab order and checking issues")
         print("Output workbook: " + output_path)
