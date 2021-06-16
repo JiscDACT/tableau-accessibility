@@ -315,6 +315,16 @@ def generate_manifest_from_workbook(input_filename):
             images = tree.xpath(".//dashboard[@name='" + dashboard.get("name") + "']//zone[(@_.fcp.SetMembershipControl.false...type='bitmap' or @type='bitmap')]")
             for image in images:
                 out += '-' + image.get("param") + '\n'
+            
+            text = tree.xpath("//dashboard[@name='" + dashboard_name + "']//run[text()='" + text + "']")
+            for text in texts:
+                out += '-' + text.get("name") + '\n'
+                
+            button = tree.xpath("//dashboard[@name='" + dashboard_name + "']//zone//button//caption[text()='" + caption + "']")
+            for button in buttons:
+                out += '-' + button.get("name") + '\n'
+                
+                
     print(out)
 
 
