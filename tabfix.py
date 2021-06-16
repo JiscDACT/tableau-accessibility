@@ -316,13 +316,13 @@ def generate_manifest_from_workbook(input_filename):
             for image in images:
                 out += '-' + image.get("param") + '\n'
             
-            text = tree.xpath("//dashboard[@name='" + dashboard_name + "']//run[text()='" + text + "']")
+            texts = tree.xpath("//dashboard[@name='" + dashboard.get("name") + "']//run")
             for text in texts:
-                out += '-' + text.get("name") + '\n'
+                out += '-' + text.text + '\n'
                 
-            button = tree.xpath("//dashboard[@name='" + dashboard_name + "']//zone//button//caption[text()='" + caption + "']")
+            buttons = tree.xpath("//dashboard[@name='" + dashboard.get("name") + "']//zone//button//caption")
             for button in buttons:
-                out += '-' + button.get("name") + '\n'
+                out += '-' + button.text+ '\n'
                 
                 
     print(out)
