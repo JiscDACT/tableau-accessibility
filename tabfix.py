@@ -1,4 +1,7 @@
 # SPDX-License-Identifier: MIT
+import re
+
+import lxml.etree
 from lxml.etree import XMLParser, parse
 import argparse
 import os
@@ -324,8 +327,30 @@ def generate_manifest_from_workbook(input_filename):
             for button in buttons:
                 out += '-' + button.text + '\n'
 
-    print(out)
+            parameters = tree.xpath(".//dashboard[@name='" + dashboard.get("name") + "']//zone[@*='paramctrl']")
+            for parameter in parameters:
+                parameter_name = None
+                if len(parameter):
+                    # Custom name
+                    for element in parameter.iter("run"):
+                        parameter_name = element.text
+                if parameter_name is None:
+                    parameter_name = parameter.get("param")
+                    reference = tree.xpath("//column[@caption and @name='"+parameter_name.split(".")[1]+"']")
+                    if reference is not None and reference.__len__() > 0:
+                        parameter_name = reference[0].get("caption")
+                out += '-' + parameter_name + '\n'
 
+            filters = tree.xpath(".//dashboard[@name='" + dashboard.get("name") + "']//zone[@param and @*='filter']")
+            pattern = re.compile(r"\[.*\]\.\[.*:(.*):nk\]")
+            for filter in filters:
+                filter_name = filter.get("param")
+                m = pattern.match(filter_name)
+                if m:
+                    filter_name = m.group(1)
+                out += '-' + filter_name + '\n'
+
+    print(out)
 
 
 if __name__ == "__main__":
