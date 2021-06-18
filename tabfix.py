@@ -322,9 +322,8 @@ def generate_manifest_from_workbook(input_filename):
                 
             buttons = tree.xpath("//dashboard[@name='" + dashboard.get("name") + "']//zone//button//caption")
             for button in buttons:
-                out += '-' + button.text+ '\n'
-                
-                
+                out += '-' + button.text + '\n'
+
     print(out)
 
 
