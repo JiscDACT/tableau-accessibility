@@ -310,7 +310,7 @@ def generate_manifest_from_workbook(input_filename):
         # Get the dashboards
         dashboards = tree.xpath('//dashboard')
         for dashboard in dashboards:
-            out += dashboard.get("name") + ':\n'
+            out += dashboard.get('"name"') + ':\n'
             views = tree.xpath('.//dashboard[@name=\''+dashboard.get("name")+'\']//zone[@name and not(@param)]')
             for view in views:
                 out += '- "' + view.get("name") + '"\n'
