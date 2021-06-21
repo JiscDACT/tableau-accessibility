@@ -313,19 +313,19 @@ def generate_manifest_from_workbook(input_filename):
             out += dashboard.get("name") + ':\n'
             views = tree.xpath('.//dashboard[@name=\''+dashboard.get("name")+'\']//zone[@name and not(@param)]')
             for view in views:
-                out += '-' + view.get("name") + '\n'
+                out += '- "' + view.get("name") + '"\n'
 
             images = tree.xpath(".//dashboard[@name='" + dashboard.get("name") + "']//zone[(@_.fcp.SetMembershipControl.false...type='bitmap' or @type='bitmap')]")
             for image in images:
-                out += '-' + image.get("param") + '\n'
+                out += '- "' + image.get("param") + '"\n'
             
             texts = tree.xpath("//dashboard[@name='" + dashboard.get("name") + "']//run")
             for text in texts:
-                out += '-' + text.text + '\n'
+                out += '- "' + text.text + '"\n'
                 
             buttons = tree.xpath("//dashboard[@name='" + dashboard.get("name") + "']//zone//button//caption")
             for button in buttons:
-                out += '-' + button.text + '\n'
+                out += '- "' + button.text + '"\n'
 
             parameters = tree.xpath(".//dashboard[@name='" + dashboard.get("name") + "']//zone[@*='paramctrl']")
             for parameter in parameters:
@@ -339,7 +339,7 @@ def generate_manifest_from_workbook(input_filename):
                     reference = tree.xpath("//column[@caption and @name='"+parameter_name.split(".")[1]+"']")
                     if reference is not None and reference.__len__() > 0:
                         parameter_name = reference[0].get("caption")
-                out += '-' + parameter_name + '\n'
+                out += '- "' + parameter_name + '"\n'
 
             filters = tree.xpath(".//dashboard[@name='" + dashboard.get("name") + "']//zone[@param and @*='filter']")
             pattern = re.compile(r"\[.*\]\.\[.*:(.*):nk\]")
@@ -348,7 +348,7 @@ def generate_manifest_from_workbook(input_filename):
                 m = pattern.match(filter_name)
                 if m:
                     filter_name = m.group(1)
-                out += '-' + filter_name + '\n'
+                out += '- "' + filter_name + '"\n'
 
     print(out)
 
