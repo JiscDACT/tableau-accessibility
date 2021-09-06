@@ -197,4 +197,3 @@ def test_fix_tabs_2(xml_fixture_2020):
     p1 = tabfix.get_item(tree, "Dashboard", "Parameter 1 Name")
     assert "101" == p2.get("id")
     assert "100" == p1.get("id")
-

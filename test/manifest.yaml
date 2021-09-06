@@ -9,6 +9,13 @@ Dashboard:
 - Region
 - Bar Without Mark Labels
 - '% blah'
+- '<param>'
+- 'A & B'
+- 'one - two'
+- 'C. A, B & C'
+- 'Home/Overseas'
+- "'"
+- "01233456"
 Other Dashboard:
 - Parameter 1
 - Parameter 2
