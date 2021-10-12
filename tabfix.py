@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 import re
-
+from sys import exit
 import lxml.etree
 from lxml.etree import XMLParser, parse
 import argparse
